@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:idy/model/ChallengeResponse.dart';
 
 class ChallengeListWidget extends StatelessWidget {
-  final Color color;
+  final List<ChallengeResponse> challenges;
 
-  ChallengeListWidget(this.color);
-
-  var challenges = ["a", "a", "a", "a", "a", "a", "a", "a"];
+  ChallengeListWidget(this.challenges);
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +20,7 @@ class ChallengeListWidget extends StatelessWidget {
     );
   }
 
-  Widget itemChallengeRow(String item, BuildContext context) {
+  Widget itemChallengeRow(ChallengeResponse item, BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -55,7 +54,7 @@ class ChallengeListWidget extends StatelessWidget {
         Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
           Padding(
             padding: EdgeInsets.only(right: 10.0, top: 5, bottom: 5),
-            child: Text("SKATER DE L'EXTREME !",
+            child: Text(item.name,
                 style: TextStyle(color: const Color(0xff4a4a4a), fontWeight: FontWeight.bold, fontSize: 21)),
           )
         ]),
@@ -63,7 +62,7 @@ class ChallengeListWidget extends StatelessWidget {
           Padding(
             padding: EdgeInsets.only(right: 10.0, bottom: 5),
             child: Text(
-              "Anybody who can take a selfie from the top of the montain is winning the price !Good climb guys !",
+              item.description,
               style: TextStyle(color: const Color(0xff4a4a4a), fontWeight: FontWeight.normal, fontSize: 14),
               textAlign: TextAlign.right,
             ),
@@ -71,8 +70,8 @@ class ChallengeListWidget extends StatelessWidget {
         ]),
         Stack(
           children: [
-            Image.asset(
-              'asset/images/image_bg_3.png',
+            Image.network(
+              item.photo.first as String,
               width: MediaQuery.of(context).size.width,
               height: 250,
               fit: BoxFit.fitWidth,

@@ -1,12 +1,12 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:idy/challenge_list.dart';
 import 'package:idy/model/ChallengeResponse.dart';
 import 'dart:async';
-import 'dart:convert';
-
-import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+import 'dart:developer';
 import 'package:idy/network/network.dart';
+
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
   final String title;
@@ -16,21 +16,15 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  Future<ChallengeResponse> futureAlbum;
+  Future<List<ChallengeResponse>> futureAlbum;
   int _currentIndex = 0;
-  var _listViewPage = [
-    ChallengeListWidget(Colors.white),
-    ChallengeListWidget(Colors.red),
-    ChallengeListWidget(Colors.yellowAccent),
-    ChallengeListWidget(Colors.blue),
-    ChallengeListWidget(Colors.black38)
-  ];
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     futureAlbum = fetchChallenge();
+    futureAlbum.then((value) => print('data: ${value.first.photo}'));
   }
 
   void onTabTapped(int index) {
@@ -49,7 +43,7 @@ class _MyHomePageState extends State<MyHomePage> {
             // Here we take the value from the MyHomePage object that was created by
             // the App.build method, and use it to set our appbar title.
             title: Text(widget.title),
-            ),
+          ),
           bottomNavigationBar: BottomNavigationBar(
             selectedItemColor: Colors.orange,
             unselectedItemColor: Colors.grey,
@@ -78,11 +72,9 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ],
           ),
-          body: _listViewPage[_currentIndex],
-          floatingActionButton: FloatingActionButton(
-            tooltip: 'Increment',
-            child: Icon(Icons.add),
-          ),
+          body: FutureBuilder(future: futureAlbum, builder: (context, item) {
+            return ChallengeListWidget(item.data);
+          })
         ));
   }
 }
